@@ -19,7 +19,6 @@ client = discord.Client()
 
 bot = commands.Bot(command_prefix="/")
 
-@bot.slash_command(name="predict_grades", description="Creates a graph with three running sums")
 async def predict_grades(ctx, user_token: str, course_id: int): 
     """
     consumes a user_token (a string) and a course_id (an integer) 
@@ -60,9 +59,7 @@ async def predict_grades(ctx, user_token: str, course_id: int):
     plt.title("Min, Max, and Possible Score Graph")
     plt.show()
     plt.savefig("grades_graph.png")
-    plt.close()
-    
-    await ctx.send(file=discord.File("grades_graph.png"))
+    plt.close()    
 
 def plot_points(user_token: str, course_id: int): 
     """
@@ -406,13 +403,6 @@ predict > Plot the trends in grades over assignments, showing max ever possible,
         return 0 
     else:
         return course_id
-
-
-@client.event
-async def on_ready():
-    for guild in client.guilds:
-        if guild.name == GUILD:
-            break
         
 @bot.slash_command(name="main", description="Interact with a console to run execute function based on input")
 async def main(ctx, user_token: str):
