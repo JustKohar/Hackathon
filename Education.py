@@ -64,6 +64,8 @@ async def predict_grades(user_token: str, course_id: int):
     
     await ctx.send(file=discord.File("grades_graph.png"))
 
+
+@bot.slash_command(name=)
 def plot_points(user_token: str, course_id: int): 
     """
      consumes a user_token (a string) and a course_id (an integer) and returns nothing,
