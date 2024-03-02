@@ -20,13 +20,13 @@ client = discord.Client()
 bot = commands.Bot(command_prefix="/")
 
 @bot.slash_command(name="predict_grades", description="Creates a graph with three running sums")
-async def predict_grades(user_token: str, course_id: int): 
+async def predict_grades(ctx, user_token: str, course_id: int): 
     """
     consumes a user_token (a string) and a course_id (an integer) 
     and returns nothing but creates a graph with three running sums
     """
     total_weighted = 0
-    submissions = get_submissions(ctx, user_token, course_id)
+    submissions = get_submissions(user_token, course_id)
     max_score = []
     min_score = []
     max_points = []
@@ -64,8 +64,6 @@ async def predict_grades(user_token: str, course_id: int):
     
     await ctx.send(file=discord.File("grades_graph.png"))
 
-
-@bot.slash_command(name=)
 def plot_points(user_token: str, course_id: int): 
     """
      consumes a user_token (a string) and a course_id (an integer) and returns nothing,
@@ -416,26 +414,24 @@ async def on_ready():
         if guild.name == GUILD:
             break
         
-@client.event
-def main(user_token: str):
+@bot.slash_command(name="main", description="Interact with a console to run execute function based on input")
+async def main(ctx, user_token: str):
     """
-    this function allows the user to interact with a console that will run the execute function 
+    This function allows the user to interact with a console that will run the execute function
     based upon their input.
-    it will run a while loop allowing user input until the user chooses to exit and that will stop the loop.
+    It will run a while loop allowing user input until the user chooses to exit and that will stop the loop.
     """
     new = []
-    courses = get_courses(user_token)
+    courses = get_courses(user_token)  
     for course in courses:
         new.append(course.id)
-    course_total = count_courses(user_token)
+    course_total = count_courses(user_token)  
     if not course_total:
-        print("No courses available")
-        return 
-    b = find_cs1(user_token)
+        await ctx.send("No courses available")
+        return
+    b = find_cs1(user_token)  
     if b == 0:
         b = new[0]
     while b > 0:
-        command = input("Enter Your Command Here. For a list of commands, type help")
-        b = execute(command, user_token, b)
-
+        await ctx.send("Enter Your Command Here. For a list of commands, type help")
 client.run(TOKEN)
