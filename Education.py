@@ -26,7 +26,7 @@ async def predict_grades(user_token: str, course_id: int):
     and returns nothing but creates a graph with three running sums
     """
     total_weighted = 0
-    submissions = get_submissions(user_token, course_id)
+    submissions = get_submissions(ctx, user_token, course_id)
     max_score = []
     min_score = []
     max_points = []
@@ -54,10 +54,15 @@ async def predict_grades(user_token: str, course_id: int):
     plt.plot(max_points)
     plt.plot(max_score)
     plt.plot(min_score)
+    plt.grid()
     plt.ylabel("Scores")
     plt.xlabel("Assignment")
     plt.title("Min, Max, and Possible Score Graph")
     plt.show()
+    plt.savefig("grades_graph.png")
+    plt.close()
+    
+    await ctx.send(file=discord.File("grades_graph.png"))
 
 def plot_points(user_token: str, course_id: int): 
     """
