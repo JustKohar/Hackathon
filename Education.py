@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 TOKEN = os.getenv("MTIxMzUzNzI3MzgxMTgzMjg0Mg.GSpTc2.LXNRPADODbVG91NWnL1SjsFf-oQePCcUbFLqFU")
-GUILD = os.getenv('')
+GUILD = os.getenv('1213537641597894748')
 
 client = discord.Client()
 
