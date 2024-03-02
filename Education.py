@@ -2,6 +2,7 @@
 import os
 
 import discord
+from discord.ext import commands
 from dotenv import load_dotenv
 from bakery_canvas import get_courses
 from bakery_canvas import get_submissions
@@ -12,11 +13,14 @@ from datetime import datetime
 
 load_dotenv()
 TOKEN = os.getenv("MTIxMzUzNzI3MzgxMTgzMjg0Mg.GSpTc2.LXNRPADODbVG91NWnL1SjsFf-oQePCcUbFLqFU")
-GUILD = os.getenv('1213537641597894748')
+GUILD = os.getenv('1213537641597894748')    
 
 client = discord.Client()
 
-def predict_grades(user_token: str, course_id: int): 
+bot = commands.Bot(command_prefix="/")
+
+@bot.slash_command(name="predict_grades", description="Creates a graph with three running sums")
+async def predict_grades(user_token: str, course_id: int): 
     """
     consumes a user_token (a string) and a course_id (an integer) 
     and returns nothing but creates a graph with three running sums
