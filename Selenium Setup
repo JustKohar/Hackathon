@@ -1,0 +1,5 @@
+import os
+from selenium import webdriver
+
+os.environ['PATH'] += r"C:\Users\Ryan Cortes\Desktop\selenium test\chromedriver-win64\chromedriver-win64\chromedriver.exe"
+driver = webdriver.Chrome()
