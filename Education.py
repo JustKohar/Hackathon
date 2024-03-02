@@ -15,9 +15,10 @@ load_dotenv()
 TOKEN = os.getenv("MTIxMzUzNzI3MzgxMTgzMjg0Mg.GSpTc2.LXNRPADODbVG91NWnL1SjsFf-oQePCcUbFLqFU")
 GUILD = os.getenv('1213537641597894748')    
 
-client = discord.Client()
+intents = discord.Intents.default()
+client = discord.Client(intents=intents)
 
-bot = commands.Bot(command_prefix="/")
+bot = commands.Bot(command_prefix="/", intents=intents)
 
 async def predict_grades(ctx, user_token: str, course_id: int): 
     """
@@ -404,7 +405,7 @@ predict > Plot the trends in grades over assignments, showing max ever possible,
     else:
         return course_id
         
-@bot.slash_command(name="main", description="Interact with a console to run execute function based on input")
+@bot.command(name="main", description="Interact with a console to run execute function based on input")
 async def main(ctx, user_token: str):
     """
     This function allows the user to interact with a console that will run the execute function
