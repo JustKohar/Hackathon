@@ -9,11 +9,9 @@ from bakery_canvas import get_submissions
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-
-
-load_dotenv()
-TOKEN = os.getenv("")
-GUILD = os.getenv('')    
+print(load_dotenv(override=True))
+TOKEN = os.getenv("TOKEN")
+GUILD = os.getenv('GUILD')    
 
 intents = discord.Intents.default()
 client = discord.Client(intents=intents)
