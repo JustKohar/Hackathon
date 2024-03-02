@@ -9,14 +9,15 @@ from bakery_canvas import get_submissions
 import matplotlib.pyplot as plt
 from datetime import datetime
 
-print(load_dotenv(override=True))
+load_dotenv(override=True)
 TOKEN = os.getenv("TOKEN")
 GUILD = os.getenv('GUILD')    
 
-intents = discord.Intents.default()
+intents = discord.Intents.all()
 client = discord.Client(intents=intents)
 
-bot = commands.Bot(command_prefix="/", intents=intents)
+bot = commands.Bot(command_prefix="~", intents=intents)
+
 
 async def predict_grades(ctx, user_token: str, course_id: int): 
     """
@@ -423,4 +424,28 @@ async def main(ctx, user_token: str):
         b = new[0]
     while b > 0:
         await ctx.send("Enter Your Command Here. For a list of commands, type help")
-client.run(TOKEN)
+
+
+def main():
+    apples()
+    pass
+
+@bot.command(name="say")
+async def say_message(ctx, *, message: str):
+    channel_id = 'GUILD'  # Replace with the actual channel ID
+    channel = bot.get_channel(channel_id)
+    await channel.send(message)
+
+@bot.command(name="apples")
+async def apples(ctx):
+    await ctx.send("hello")
+    
+@bot.command(name="pop")
+async def pop(ctx):
+    await ctx.send("goodbye")
+
+@bot.event
+async def on_ready():
+    print(f'{bot.user} is now running')
+
+bot.run(TOKEN)
