@@ -539,9 +539,9 @@ def render_courses(user_token: str)-> str:
         apple = apple + course
     return apple 
 
-@bot.command(name="test")
-async def test(ctx, user_token):
-    print(find_cs1(user_token))
+#@bot.command(name="test")
+#async def test(ctx, user_token):
+#    print(find_cs1(user_token))
     
 def Funny(command):    
     return command
@@ -549,12 +549,13 @@ def Funny(command):
 function_mapping = {
     'jviszoki': Funny,
     'course': Funny,
+    'points' : Funny,
 }    
     
     
-commands = ['course']    
+commands = ['course', 'points', 'comments', 'graded', 'score_ungrded', 'score', 'group', 'assignment', 'list', 'scores', 'earliness', 'compare', 'predict' ]    
     
-@bot.command(name= "testing")
+@bot.command(name= "its_alive")
 async def set_data(ctx):
     new = []
     courses = get_courses(user_token)
