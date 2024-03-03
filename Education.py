@@ -521,7 +521,9 @@ def find_course(user_token: str, course_id: int)-> str:
         if courses.id == course_id:
             return courses.name
     return "no course"
-def render_courses(user_token: str)-> str:
+
+@bot.command(name = "sadness")
+async def render_courses(user_token: str)-> str:
     """
     this function consumes a user token and returns a string
     of all their courses and their course Ids with each being 
@@ -538,10 +540,6 @@ def render_courses(user_token: str)-> str:
     for course in new:
         apple = apple + course
     return apple 
-
-#@bot.command(name="test")
-#async def test(ctx, user_token):
-#    print(find_cs1(user_token))
     
 def Funny(command):    
     return command
@@ -682,17 +680,12 @@ async def set_data(ctx):
     try:
         message = await bot.wait_for('message', check=lambda m: m.author == ctx.author and m.channel == ctx.channel, timeout=60)
         data = message.content
-
-        # Save user input to a file (optional)
         with open('data.txt', 'w') as file:
             file.write(data)
 
         if data in commands:
-            # Execute the command and get the result
-            result = execute(data, user_token, b)
-
-            # Send the result back to the Discord channel
-            await ctx.send(result)  # This line sends the result to Discord
+            result = execute(data, user_token, b)           
+  
     except asyncio.TimeoutError:
         await ctx.send("Timeout! Please try again.")
 
@@ -700,7 +693,7 @@ async def set_data(ctx):
 
 @bot.command(name="say")
 async def say_message(ctx, *, message: str):
-    channel_id = 'GUILD'  # Replace with the actual channel ID
+    channel_id = 'GUILD'  
     channel = bot.get_channel(channel_id)
     await channel.send(message)
 
@@ -790,5 +783,4 @@ async def on_ready():
     
 
 bot.run(TOKEN)
-
 
