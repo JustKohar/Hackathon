@@ -171,6 +171,27 @@ CIEG315 = DiscordBotInformation(
     ta_hours="Farshad Hesamfar, His Email Is: farshaad@udel.edu and His Office Hours are Monday/Wednesday from 4-6pm in 306K DuPont Hall"
 )
 
+CISC210 = DiscordBotInformation(
+    class_name = "CISC210",
+    professors= "The Professor For This Course is Professor Roosen",
+    professors_hours= "Professor Roosen Has Office Hours on Monday from 10:30am-12pm and Thursday from 1:30-3pm",
+    location_of_professors="Professor Roosen is Located in Smith 407",
+    emails="Professor Roosen's Email Is: roosen@udel.edu",
+    ta_hours="On Monday: 11:30am-12:30pm, 12:45pm-4:30pm\n"
+             "Tuesday: 8:30-10:55am, 11:10am-2pm, 3:30-5:30pm\n"
+             "Wednesday: 9:10-11:30am, 12:40-4pm, 4:15-5:15pm\n"
+             "Thursday: 9:35-10:55am, 11:10-3pm, 3:55-6pm\n"
+             "Friday: 9-10am, 10:15am-2:30pm, 5-7pm"
+)
+
+CPEG202 = DiscordBotInformation(
+    class_name = "CPEG202",
+    professors= "The Professor For This Course is Professor Nathan Lazarus",
+    professors_hours= "Professor Nathan Lazarus Has Office Hours on Thursday from 2:40-3:40pm",
+    location_of_professors="Professor Nathan Lazarus is Located in EVN201H",
+    emails="Professor Nathan Lazarus's Email Is: nlazarus@udel.edu",
+    ta_hours="There Are Only TA Hours on Monday from 11am-7pm"
+)
 
 
 CISC181 = generate_formatted_message(CISC181)
@@ -187,7 +208,8 @@ MATH243 = generate_formatted_message(MATH243)
 COMM212 = generate_formatted_message(COMM212)
 MATH351 = generate_formatted_message(MATH351)
 CIEG315 = generate_formatted_message(CIEG315)
-
+CISC210 = generate_formatted_message(CISC210)
+CPEG202 = generate_formatted_message(CPEG202)
 
 #MUSC315 = DiscordBotInformation("MUSC315\n", "The Professor for this course is Dr. Maria Anne Purciello\n","Dr. Purciello has open office hours on Thursday from 12:30-1:30\n",
 #"Dr. Purciello can be found on the third floor of the Amy E. DuPont Music building, room 317\n", "Dr. Purciello's email is: 'mpuriel@udel.edu'")
@@ -570,7 +592,14 @@ async def math351(ctx):
 @bot.command(name="CIEG315")
 async def cieg315(ctx):
     await ctx.send(CIEG315)
+
+@bot.command(name="CISC210")
+async def cisc210(ctx):
+    await ctx.send(CISC210)
     
+@bot.command(name="CPEG202")
+async def cpeg202(ctx):
+    await ctx.send(CPEG202)
 @bot.event
 async def on_ready():
     print(f'{bot.user} is now running')
