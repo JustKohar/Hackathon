@@ -510,6 +510,7 @@ def find_cs1(user_token: str)-> int:
                 return courses.id
     return 0
 
+
 def find_course(user_token: str, course_id: int)-> str:
     """
     this course gets a list of courses from a user token, 
@@ -522,7 +523,6 @@ def find_course(user_token: str, course_id: int)-> str:
         if courses.id == course_id:
             return courses.name
     return "no course"
-
 def render_courses(user_token: str)-> str:
     """
     this function consumes a user token and returns a string
@@ -541,30 +541,113 @@ def render_courses(user_token: str)-> str:
         apple = apple + course
     return apple 
 
-@bot.command(name="execute")
-async def execute(ctx, command: str, user_token: str, course_id: int):
-    if command == "course":
-        await ctx.send(render_courses(user_token))
-        a = await ctx.send("Please enter the new course ID:")
-        try:
-            response = await bot.wait_for("message", check=lambda m: m.author == ctx.author, timeout=30)
-            a = int(response.content)
-            await ctx.send(find_course(user_token, a))
+bot.command(name = "Run!")
+async def execute(ctx):
+    
+    def execute(command: str, user_token: str, course_id: int)-> int:
+        """
+        this function does a variety of things based upon the command.
+    
+        if the command is course, the function will return the new course and course ID
+    
+        if the command is exit, the function closes
+    
+        if the command is points, the function prints the total points available for all assignments
+    
+        if the command is comments, the function runs count_comments on the current course_id and prints the result
+    
+        if the command is graded, the function prints the result of calling ratio_graded on the function
+    
+        if the command is score_unweighted, the function prints the result of calling average_score for the current course id 
+    
+        if the command is score, the fucntion prints the result of calling average_weighted for the current course_id 
+    
+        if the command is group, the fucntion prints the average of a group by:
+        Prompting the user for a group name
+        Calling the average_group function
+        Printing the result
+    
+        if the command is assignment, the function prints out the assignment details by:
+        Prompting the user for an assignment ID
+        Converting the result to an integer
+        Calling the render_assignment function
+        Printing the result
+    
+        if the command is list,  the fucntion prints out the result of calling render_all on the current course ID, to list all the current assignments.
+    
+        if the command is scores, the function calls the plot_scores function to create a graph of the distribution of fractional scores of graded assignments.
+    
+        if the command is earliness, the function calls the plot_earliness function 
+        to create a graph of the distribution of the earliness of submissions relative to their due date.
+    
+        if the command is compare, the function calls the plot_points function to create a graph of the relationship between assignments' 
+        points possible and their weighted points possible, to analyze how different the values are.
+    
+        if the command is predict, the function calls the predict_grades function to create a graph with three running sums, 
+        showing the possible grades that could be earned in the course (maximum ever possible, maximum still possible, minimum still possible).
+    
+        if the command is help, the function prints out a list of commands and a short description to go with each 
+    
+        otherwise the function returns the course_id value that was input at the beginning
+        """
+        if command == "course":
+            print(render_courses(user_token))
+            a = input("new course ID")
+            a = int(a)
+            print(find_course(user_token, a))
             return a
-        except asyncio.TimeoutError:
-            await ctx.send("Timed out. Please try again.")
+        if command == "exit":
+            return 0
+        if command == "points":
+            print(total_points(user_token, course_id))
+        if command == "comments":
+            print(count_comments(user_token, course_id))
+        if command == "graded":
+            print(ratio_graded(user_token, course_id))
+        if command == "score_unweighted":
+            print(average_score(user_token, course_id)) 
+        if command == "score":
+            print(average_weighted(user_token, course_id))
+        if command == "group":
+            group_name = input("What's the group name?")
+            print(average_group(user_token, course_id, group_name))
+        if command == "assignment":
+            placeholder = input("what's the assignment id?")
+            assignment_id = int(placeholder) 
+            print(render_assignment(user_token, course_id, assignment_id))
+        if command == "list":
+            print(render_all(user_token, course_id))
+        if command == "scores":
+            plot_scores(user_token, course_id)
+        if command == "earliness":
+            plot_earliness(user_token, course_id) 
+        if command == "compare":
+            plot_points(user_token, course_id) 
+        if command == "predict":
+            predict_grades(user_token, course_id)
+        if command == "help":
+            print("""
+exit > Exit the application
+help > List all the commands
+course > Change current course
+points > Print total points in course
+comments > Print how many comments in course
+graded > Print ratio of ungraded/graded assignments
+score_unweighted > Print average unweighted score
+score > Print average weighted score
+group > Print average of assignment group, by name
+assignment > Print the details of a specific assignment, by ID
+list > List all the assignments in the course
+scores > Plot the distribution of grades in the course
+earliness > Plot the distribution of the days assignments were submitted early
+compare > Plot the relationship between assignments' points possible and their weighted points possible
+predict > Plot the trends in grades over assignments, showing max ever possible, max still possible, and minimum still possible
+""")
+            return 0 
+        else:
             return course_id
-    elif command == "exit":
-        await ctx.send("Exiting the application.")
-        return 0
-    elif command == "points":
-        await ctx.send(total_points(user_token, course_id))
-    elif command == "comments":
-        await ctx.send(count_comments(user_token, course_id))
-    # Add other commands here...
-    else:
-        await ctx.send("Invalid command. Please try again.")
-        return course_id
+    
+
 
 @bot.command(name="say")
 async def say_message(ctx, *, message: str):
@@ -658,7 +741,7 @@ async def on_ready():
 
 @bot.command(name="Canvas")
 async def set_data(ctx):
-    await ctx.send("Please enter the data:")
+    await ctx.send("Please Enter Your :")
     try:
         message = await bot.wait_for('message', check=lambda m: m.author == ctx.author and m.channel == ctx.channel, timeout=60)
         data = message.content
@@ -669,6 +752,6 @@ async def set_data(ctx):
         await ctx.send("Data saved successfully!")
     except asyncio.TimeoutError:
         await ctx.send("Timeout! Please try again.")
+        
 
- 
 bot.run(TOKEN)
