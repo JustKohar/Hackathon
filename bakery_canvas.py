@@ -17,7 +17,7 @@ try:
                                  ignored_parameters=[])
 except ImportError:
     print("Warning! Please install requests-cache using the Tools menu (Manage Packages)")
-
+    
 CANVAS_API_URL = "https://udel.instructure.com/api/graphql"
 HEADER = {'User-Agent': 'Bakery Canvas library for educational purposes'}
 COURSE_QUERY = """

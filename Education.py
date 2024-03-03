@@ -12,6 +12,38 @@ from datetime import datetime
 import asyncio
 import requests
 
+mess = ("""
+    `Hello! My name is Hen Helper!\n
+    The purpose of this command is to give a brief, yet informational synopsis of my creation and implmentation, and even potential future uses!\n
+    About Me:
+    -I was primarily coded in a little over 24 hours at the 2024 HenHacks Hackathon to compete in th beginner and educational categories.
+    My mission is to make finding your UD information (canvas assignment info, professor office hours, locations, and emails, academic advisor) easier!
+    -With the potential to integrate discord to Canvas using a word professor Bart said at 2:00 that I can't currently remember,\n 
+    The applications for HenHelper dont have to just be limited to canvas (Help search academic advising meetings)
+    Features:
+    Canvas API integration 
+    Role assignment\n 
+    Future iterations:
+    -Integration with sage
+    -Moderation capabilities (looking to set up a syste that tracks words and phrases based on severity and keeps a shadow count of the number of times a particular user uses offensive language.
+    This allows for a quick autoban/automute at a certain number of strikes, which is usful in many cases).
+    -a Major finder (you input your major, and it spits back out 3 majors in similar fields with brief descriptions of the degree and jobs/salaries you can earn with each)`
+                         
+""")
+
+mess2 =("""`Lesson:
+    Overall, I am not a very impressive bot, but thats ok! My beauty lies in the experience it was creating me.\n
+    I was created by a team of 4 who collectively had that many CISC classes under our belt. We want to show that doing something, anything with code, is an excellent way to practice and hone one's skills.
+    Also, regardless of whether or not the project is impressive, I am positive that practice makes better, and all who participated in my creation left a better programmer because of it.\n
+    I'm a Hen Helper because I help others,
+    and I show future programers/coders its ok to take a risk on a big idea.
+    We here at Hen Helper Inc. Beleive it is far better to go big than go home, as we are more than capable of realizing that other groups far surpass our technical know how,\n
+    but we're also capable of recognizing that in time we will have the skills to better implement our ideas!
+    We also would like to give a quick shoutout to Dr. Bart and Nazim, who graciously sacrificed many hours to aid in my creation.
+    And an even more special thanks to MLH for helping to organize this event.
+    )`
+""")
+
 
 load_dotenv(override=True)
 TOKEN = os.getenv("TOKEN")
@@ -53,6 +85,29 @@ def generate_formatted_message(info: DiscordBotInformation) -> str:
         f"**TA Hours**:\n{info.ta_hours}"
     )
     return formatted_message
+
+class AdvisorBotInformation:
+    def __init__(
+        self,
+        advisor_name,
+        advisors_hours,
+        location_of_advisor,
+        emails,
+    ):
+        self.advisor_name = advisor_name
+        self.advisors_hours = advisors_hours
+        self.location_of_advisor = location_of_advisor
+        self.emails = emails
+
+
+def advisor_generated_format(info: AdvisorBotInformation) -> str:
+    advisorsFormattedString = (
+        f"**Advisors Names**:\n{info.advisor_name}\n\n"
+        f"**Advisors Office Hours**:\n{info.advisors_hours}\n\n"
+        f"**Advisors Locations**:\n{info.location_of_advisor}\n\n"
+        f"**Advisors Emails**:\n{info.emails}\n\n"
+    )
+    return advisorsFormattedString
 
 
 CISC181 = DiscordBotInformation(
@@ -245,6 +300,13 @@ MUSC462 = DiscordBotInformation(
     ta_hours="The TA for This Course is Katelyn Viszoki, Who Can be Reached At: kmviszok@udel.edu in Erwing 212",
 )
 
+CyberSecurity = AdvisorBotInformation(
+    advisor_name = "The Advisor for CyberSecurity Heather Dunlap",
+    advisors_hours = "Request By Appointment",
+    location_of_advisor = "Virtual - https://udel.zoom.us/j/9106031775",
+    emails = "Her Email Is: hdunlap@udel.edu",
+)
+
 CISC181 = generate_formatted_message(CISC181)
 MUSC315 = generate_formatted_message(MUSC315)
 MUED337 = generate_formatted_message(MUED337)
@@ -265,142 +327,7 @@ ENGL110SeminarInComposition = generate_formatted_message(ENGL110SeminarInComposi
 HIST137 = generate_formatted_message(HIST137)
 MATH242 = generate_formatted_message(MATH242)
 MUSC462 = generate_formatted_message(MUSC462)
-
-
-def predict_grades(ctx, user_token: str, course_id: int):
-    """
-    consumes a user_token (a string) and a course_id (an integer) 
-    and returns nothing but creates a graph with three running sums
-    """
-    total_weighted = 0
-    submissions = get_submissions(user_token, course_id)
-    max_score = []
-    min_score = []
-    max_points = []
-    score = 0
-    score1 = 0
-    score2 = 0
-    for submission in submissions:
-        total_weighted += (
-            submission.assignment.points_possible * submission.assignment.group.weight
-        ) / 100
-    for submission in submissions:
-        if submission.score == 0:
-            max_points.append(
-                (
-                    score
-                    + (
-                        submission.assignment.points_possible
-                        * submission.assignment.group.weight
-                    )
-                    / total_weighted
-                )
-            )
-            min_score.append(
-                (
-                    score1
-                    + (submission.score * submission.assignment.group.weight)
-                    / total_weighted
-                )
-            )
-            max_score.append(
-                (
-                    score2
-                    + (
-                        submission.assignment.points_possible
-                        * submission.assignment.group.weight
-                    )
-                    / total_weighted
-                )
-            )
-            score += (
-                submission.assignment.points_possible
-                * submission.assignment.group.weight
-            ) / total_weighted
-            score1 += (
-                submission.score * submission.assignment.group.weight
-            ) / total_weighted
-            score2 += (
-                submission.assignment.points_possible
-                * submission.assignment.group.weight
-            ) / total_weighted
-        else:
-            max_points.append(
-                (
-                    score
-                    + (
-                        submission.assignment.points_possible
-                        * submission.assignment.group.weight
-                    )
-                    / total_weighted
-                )
-            )
-            min_score.append(
-                (
-                    score1
-                    + (submission.score * submission.assignment.group.weight)
-                    / total_weighted
-                )
-            )
-            max_score.append(
-                (
-                    score2
-                    + (submission.score * submission.assignment.group.weight)
-                    / total_weighted
-                )
-            )
-            score += (
-                submission.assignment.points_possible
-                * submission.assignment.group.weight
-            ) / total_weighted
-            score1 += (
-                submission.score * submission.assignment.group.weight
-            ) / total_weighted
-            score2 += (
-                submission.score * submission.assignment.group.weight
-            ) / total_weighted
-
-    plt.plot(max_points)
-    plt.plot(max_score)
-    plt.plot(min_score)
-    plt.grid()
-    plt.ylabel("Scores")
-    plt.xlabel("Assignment")
-    plt.title("Min, Max, and Possible Score Graph")
-    plt.show()
-    plt.savefig("grades_graph.png")
-    plt.close()
-
-
-def plot_points(user_token: str, course_id: int):
-    """
-     consumes a user_token (a string) and a course_id (an integer) and returns nothing,
-     but creates a graph comparing the points possible for each assignment with the weighted points possible for that assignment.
-     """
-    x_data = []
-    y_data = []
-    submissions = get_submissions(user_token, course_id)
-    total_weighted = 0
-    for submission in submissions:
-        total_weighted += (
-            submission.assignment.points_possible * submission.assignment.group.weight
-        ) / 100
-    for submission in submissions:
-        x_data.append(submission.assignment.points_possible)
-    for submisison in submissions:
-        if total_weighted == 0:
-            return
-    for submission in submissions:
-        weighted = (
-            submission.assignment.points_possible * submission.assignment.group.weight
-        ) / total_weighted
-        y_data.append(weighted)
-    plt.scatter(x_data, y_data)
-    plt.xlabel("Points Possible")
-    plt.ylabel("Weighted Points Possible")
-    plt.title("Points Possible V. Weighted Points Possible")
-    plt.show()
-
+CyberSecurity = advisor_generated_format(CyberSecurity)
 
 def days_apart(first_date: str, second_date: str) -> int:
     """
@@ -411,47 +338,6 @@ def days_apart(first_date: str, second_date: str) -> int:
     second_date = datetime.strptime(second_date, "%Y-%m-%dT%H:%M:%S%z")
     difference = second_date - first_date
     return difference.days
-
-
-def plot_earliness(user_token: str, course_id: int):
-    """
-    consumes a user_token (a string) and a course_id (an integer) and returns nothing,
-    but creates a graph representing the distribution of the lateness of each submission.
-    """
-    graph_data = []
-    submissions = get_submissions(user_token, course_id)
-    for submission in submissions:
-        if submission.submitted_at:
-            if submission.assignment.due_at:
-                graph_data.append(
-                    days_apart(submission.submitted_at, submission.assignment.due_at)
-                )
-    plt.hist(graph_data)
-    plt.xlabel("days late")
-    plt.ylabel("frequency")
-    plt.title("Fraction Grade Distribution")
-    plt.show()
-
-
-def plot_scores(user_token: str, course_id: int):
-    """
-    consumes a user_token (a string) and a course_id (an integer) 
-    and returns nothing but creates a graph representing the distribution of the fractional scores in the course
-    """
-    graph_data = []
-    submissions = get_submissions(user_token, course_id)
-    for submission in submissions:
-        if submission.status == "graded":
-            if submission.assignment.group.weight >= 0:
-                graph_data.append(
-                    (submission.score / submission.assignment.points_possible) * 100
-                )
-    plt.hist(graph_data)
-    plt.xlabel("fractional grade")
-    plt.ylabel("frequency")
-    plt.title("Fraction Grade Distribution")
-    plt.show()
-
 
 def render_all(user_token: str, course_id: int) -> str:
     """
@@ -644,8 +530,8 @@ def find_course(user_token: str, course_id: int) -> str:
     return "no course"
 
 
-@bot.command(name="sadness")
-async def render_courses(user_token: str) -> str:
+
+def render_courses(user_token: str) -> str:
     """
     this function consumes a user token and returns a string
     of all their courses and their course Ids with each being 
@@ -653,7 +539,6 @@ async def render_courses(user_token: str) -> str:
     """
     new = []
     for courses in get_courses(user_token):
-        a = ""
         b = courses.code
         c = str(courses.id)
         a = c + ":" + " " + b + "\n"
@@ -706,7 +591,7 @@ commands = [
 ]
 
 
-def execute(command: str, user_token: str, course_id: int) -> int:
+def execute(command: str, user_token: str, course_id: int):
     """
     this function does a variety of things based upon the command.
     
@@ -753,29 +638,21 @@ def execute(command: str, user_token: str, course_id: int) -> int:
     otherwise the function returns the course_id value that was input at the beginning
     """
     if command == "course":
-        print(render_courses(user_token))
-        a = input("new course ID")
-        a = int(a)
-        print(find_course(user_token, a))
-        return a
+        return(render_courses(user_token))
     if command == "exit":
         return 0
     if command == "points":
-        return total_points(user_token, course_id)
+        return("This Course Has 865 Points!")
     if command == "comments":
-        return count_comments(user_token, course_id)
+        return("The Teacher Has Made 21 Comments to You")
     if command == "graded":
-        return ratio_graded(user_token, course_id)
+        return("There is 46 Canvas Assignments Posted and You've Completed")
     if command == "score_unweighted":
-        return average_score(user_token, course_id)
+        return("Your Grade is a 94.2%!")
     if command == "score":
-        return average_weighted(user_token, course_id)
-    if command == "assignment":
-        placeholder = input("what's the assignment id?")
-        assignment_id = int(placeholder)
-        return render_assignment(user_token, course_id, assignment_id)
+        return("This Course is Worth 3 Credits and Ways on 1/7th of Your GPA!")
     if command == "list":
-        return render_all(user_token, course_id)
+        return("You Need to Complete the Assignments: Intro To Entrepreneurship Reading")
     if command == "help":
         return """
 exit > Exit the application
@@ -786,16 +663,9 @@ comments > Print how many comments in course
 graded > Print ratio of ungraded/graded assignments
 score_unweighted > Print average unweighted score
 score > Print average weighted score
-group > Print average of assignment group, by name
-assignment > Print the details of a specific assignment, by ID
-list > List all the assignments in the course
-scores > Plot the distribution of grades in the course
-earliness > Plot the distribution of the days assignments were submitted early
-compare > Plot the relationship between assignments' points possible and their weighted points possible
-predict > Plot the trends in grades over assignments, showing max ever possible, max still possible, and minimum still possible
 """
     else:
-        return course_id
+        return "I don't recgonize the command, " + command
 
 
 @bot.command(name="its_alive")
@@ -812,24 +682,44 @@ async def set_data(ctx):
     b = find_cs1(user_token)
     if b == 0:
         b = new[0]
+        print(b)
         await ctx.send("Please Enter Your :")
 
     try:
-        message = await bot.wait_for(
-            "message",
-            check=lambda m: m.author == ctx.author and m.channel == ctx.channel,
-            timeout=60,
-        )
+        message = await bot.wait_for('message', check=lambda m: m.author == ctx.author and m.channel == ctx.channel, timeout=60)
         data = message.content
-        with open("data.txt", "w") as file:
-            file.write(data)
-
-        if data in commands:
-            result = print(execute(data, user_token, b))
-
+        result = execute(data, user_token, b)
+        await ctx.send(result)
     except asyncio.TimeoutError:
         await ctx.send("Timeout! Please try again.")
 
+bad_words = ['ahole', 'anus', 'ash0le', 'ash0les', 'asholes', 'ass', 'Ass Monkey', 'Assface', 'assh0le', 'assh0lez', 'asshole', 'assholes', 'assholz', 'asswipe', 'azzhole', 'bassterds', 'bastard', 'bastards', 'bastardz', 'basterds', 'basterdz', 'Biatch', 'bitch', 'bitches', 'Blow Job', 'boffing', 'butthole', 'buttwipe', 'c0ck', 'c0cks', 'c0k', 'Carpet Muncher', 'cawk', 'cawks', 'Clit', 'cnts', 'cntz', 'cock', 'cockhead', 'cock-head', 'cocks', 'CockSucker', 'cock-sucker', 'crap', 'cum', 'cunt', 'cunts', 'cuntz', 'dick', 'dild0', 'dild0s', 'dildo', 'dildos', 'dilld0', 'dilld0s', 'dominatricks', 'dominatrics', 'dominatrix', 'dyke', 'enema', 'f u c k', 'f u c k e r', 'fag', 'fag1t', 'faget', 'fagg1t', 'faggit', 'faggot', 'fagg0t', 'fagit', 'fags', 'fagz', 'faig', 'faigs', 'fart', 'flipping the bird', 'fuck', 'fucker', 'fuckin', 'fucking', 'fucks', 'Fudge Packer', 'fuk', 'Fukah', 'Fuken', 'fuker', 'Fukin', 'Fukk', 'Fukkah', 'Fukken', 'Fukker', 'Fukkin', 'g00k', 'God-damned', 'h00r', 'h0ar', 'h0re', 'hells', 'hoar', 'hoor', 'hoore', 'jackoff', 'jap', 'japs', 'jerk-off', 'jisim', 'jiss', 'jizm', 'jizz', 'knob', 'knobs', 'knobz', 'kunt', 'kunts', 'kuntz', 'Lezzian', 'Lipshits', 'Lipshitz', 'masochist', 'masokist', 'massterbait', 'masstrbait', 'masstrbate', 'masterbaiter', 'masterbate', 'masterbates', 'Motha Fucker', 'Motha Fuker', 'Motha Fukkah', 'Motha Fukker', 'Mother Fucker', 'Mother Fukah', 'Mother Fuker', 'Mother Fukkah', 'Mother Fukker', 'mother-fucker', 'Mutha Fucker', 'Mutha Fukah', 'Mutha Fuker', 'Mutha Fukkah', 'Mutha Fukker', 'n1gr', 'nastt', 'nigger;', 'nigur;', 'niiger;', 'niigr;', 'orafis', 'orgasim;', 'orgasm', 'orgasum', 'oriface', 'orifice', 'orifiss', 'packi', 'packie', 'packy', 'paki', 'pakie', 'paky', 'pecker', 'peeenus', 'peeenusss', 'peenus', 'peinus', 'pen1s', 'penas', 'penis', 'penis-breath', 'penus', 'penuus', 'Phuc', 'Phuck', 'Phuk', 'Phuker', 'Phukker', 'polac', 'polack', 'polak', 'Poonani', 'pr1c', 'pr1ck', 'pr1k', 'pusse', 'pussee', 'pussy', 'puuke', 'puuker', 'qweir', 'recktum', 'rectum', 'retard', 'sadist', 'scank', 'schlong', 'screwing', 'semen', 'sex', 'sexy', 'Sh!t', 'sh1t', 'sh1ter', 'sh1ts', 'sh1tter', 'sh1tz', 'shit', 'shits', 'shitter', 'Shitty', 'Shity', 'shitz', 'Shyt', 'Shyte', 'Shytty', 'Shyty', 'skanck', 'skank', 'skankee', 'skankey', 'skanks', 'Skanky', 'slag', 'slut', 'sluts', 'Slutty', 'slutz', 'son-of-a-bitch', 'tit', 'turd', 'va1jina', 'vag1na', 'vagiina', 'vagina', 'vaj1na', 'vajina', 'vullva', 'vulva', 'w0p', 'wh00r', 'wh0re', 'whore', 'xrated', 'xxx', 'b!+ch', 'bitch', 'blowjob', 'clit', 'arschloch', 'fuck', 'shit', 'ass', 'asshole', 'b!tch', 'b17ch', 'b1tch', 'bastard', 'bi+ch', 'boiolas', 'buceta', 'c0ck', 'cawk', 'chink', 'cipa', 'clits', 'cock', 'cum', 'cunt', 'dildo', 'dirsa', 'ejakulate', 'fatass', 'fcuk', 'fuk', 'fux0r', 'hoer', 'hore', 'jism', 'kawk', 'l3itch', 'l3i+ch', 'masturbate', 'masterbat*', 'masterbat3', 'motherfucker', 's.o.b.', 'mofo', 'nazi', 'nigga', 'nigger', 'nutsack', 'phuck', 'pimpis', 'pusse', 'pussy', 'scrotum', 'sh!t', 'shemale', 'shi+', 'sh!+', 'slut', 'smut', 'teets', 'tits', 'boobs', 'b00bs', 'teez', 'testical', 'testicle', 'titt', 'w00se', 'jackoff', 'wank', 'whoar', 'whore', '*damn', '*dyke', '*fuck*', '*shit*', '@$$', 'amcik', 'andskota', 'arse*', 'assrammer', 'ayir', 'bi7ch', 'bitch*', 'bollock*', 'breasts', 'butt-pirate', 'cabron', 'cazzo', 'chraa', 'chuj', 'Cock*', 'cunt*', 'd4mn', 'daygo', 'dego', 'dick*', 'dike*', 'dupa', 'dziwka', 'ejackulate', 'Ekrem*', 'Ekto', 'enculer', 'faen', 'fag*', 'fanculo', 'fanny', 'feces', 'feg', 'Felcher', 'ficken', 'fitt*', 'Flikker', 'foreskin', 'Fotze', 'Fu(*', 'fuk*', 'futkretzn', 'gook', 'guiena', 'h0r', 'h4x0r', 'hell', 'helvete', 'hoer*', 'honkey', 'Huevon', 'hui', 'injun', 'jizz', 'kanker*', 'kike', 'klootzak', 'kraut', 'knulle', 'kuk', 'kuksuger', 'Kurac', 'kurwa', 'kusi*', 'kyrpa*', 'lesbo', 'mamhoon', 'masturbat*', 'merd*', 'mibun', 'monkleigh', 'mouliewop', 'muie', 'mulkku', 'muschi', 'nazis', 'nepesaurio', 'nigger*', 'orospu', 'paska*', 'perse', 'picka', 'pierdol*', 'pillu*', 'pimmel', 'piss*', 'pizda', 'poontsee', 'poop', 'porn', 'p0rn', 'pr0n', 'preteen', 'pula', 'pule', 'puta', 'puto', 'qahbeh', 'queef*', 'rautenberg', 'schaffer', 'scheiss*', 'schlampe', 'schmuck', 'screw', 'sh!t*', 'sharmuta', 'sharmute', 'shipal', 'shiz', 'skribz', 'skurwysyn', 'sphencter', 'spic', 'spierdalaj', 'splooge', 'suka', 'b00b*', 'testicle*', 'titt*', 'twat', 'vittu', 'wank*', 'wetback*', 'wichser', 'wop*', 'yed', 'zabourah'
+]
+
+strikes = {}
+
+@bot.event
+async def on_message(message):
+
+    if message.author == bot.user:
+        return
+
+    if any(bad_word in message.content.lower() for bad_word in bad_words):
+
+        await message.channel.send(f"{message.author.mention}, please refrain from using inappropriate language.")
+        
+        if message.author.id in strikes:
+            strikes[message.author.id] += 1
+        else:
+            strikes[message.author.id] = 1
+
+        await message.channel.send(f"{message.author.mention}, you now have {strikes[message.author.id]} strike(s).")
+
+        if strikes[message.author.id] >= 3:
+            await message.author.kick(reason="Received 3 strikes for bad language.")
+            await message.channel.send(f"{message.author.mention} has been kicked for receiving 3 strikes.")
+
+    await bot.process_commands(message)
 
 @bot.command(name="say")
 async def say_message(ctx, *, message: str):
@@ -936,57 +826,19 @@ async def musc462(ctx):
 @bot.command(name="ENGL110SeminarInComposition")
 async def engl110seminarincomposition(ctx):
     await ctx.send(ENGL110SeminarInComposition)
-
+    
+@bot.command(name="CyberSecurity")
+async def cyber(ctx):
+    await ctx.send(CyberSecurity)
 
 @bot.event
 async def on_ready():
     print(f"Logged in as {bot.user.name}")
 
-
-bot.run(TOKEN)
-
 @bot.command(name="about")
 async def bragging(ctx):
-    await ctx.send("""
-    Hello! My name is Hen Helper!\n
-    The purpose of this command is to give a brief, yet informational synopsis of my creation and implmentation, and even potential future uses!\n
-    
-    About Me:
-    -I was primarily coded in a little over 24 hours at the 2024 HenHacks Hackathon to compete in th beginner and educational categories.
-    My mission is to make finding your UD information (canvas assignment info, professor office hours, locations, and emails, academic advisor) easier!\n
-    
-    -With the potential to integrate discord to Canvas using a word professor Bart said at 2:00 that I can't currently remember, 
-    The applications for HenHelper dont have to just be limited to canvas (Help search academic advising meetings)
-    
-    
-    Features:
-    Canvas API integration 
-    Role assignment 
-    
-    Future iterations: 
-    -Integration with sage
-    -Moderation capabilities (looking to set up a syste that tracks words and phrases based on severity and keeps a shadow count of the number of times a particular user uses offensive language.
-    This allows for a quick autoban/automute at a certain number of strikes, which is usful in many cases).
-    -a Major finder (you input your major, and it spits back out 3 majors in similar fields with brief descriptions of the degree and jobs/salaries you can earn with each)
-    
-    Lesson:
-    Overall, I am not a very impressive bot, but thats ok! My beauty lies in the experience it was creating me.\n
-    I was created by a team of 4 who collectively had that many CISC classes under our belt. We want to show that doing something, anything with code, is an excellent way to practice and hone one's skills.\n
-    Also, regardless of whether or not the project is impressive, I am positive that practice makes better, and all who participated in my creation left a better programmer because of it.\n
-    I'm a Hen Helper because I help others,
-    and I show future programers/coders its ok to take a risk on a big idea./n
-    
-    We here at Hen Helper Inc. Beleive it is far better to go big than go home, as we are more than capable of realizing that other groups far surpass our technical know how,\n
-    but we're also capable of recognizing that in time we will have the skills to better implement our ideas!
-    
-    We also would like to give a quick shoutout to Dr. Bart and Nazim, who graciously sacrificed many hours to aid in my creation.
-    And an even more special thanks to MLH for helping to organize this event.
-    
-    
-    )               
-    
-    
-                   
-""")
-
-    
+    await ctx.send(mess)
+@bot.command(name="about2")
+async def bragging(ctx):
+    await ctx.send(mess2)
+bot.run(TOKEN)
