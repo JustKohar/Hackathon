@@ -21,6 +21,8 @@ intents = discord.Intents.all()
 intents.members = True
 client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix="~", intents=intents)
+intents.typing = False
+intents.presences = False
 
 # Define your Discord bot information class
 class DiscordBotInformation:
@@ -650,6 +652,23 @@ async def musc462(ctx):
 async def engl110seminarincomposition(ctx):
     await ctx.send(ENGL110SeminarInComposition)
 
-@bot.command(name="My Canvas API Is")
+@bot.event
+async def on_ready():
+    print(f'Logged in as {bot.user.name}')
 
+@bot.command(name="Canvas")
+async def set_data(ctx):
+    await ctx.send("Please enter the data:")
+    try:
+        message = await bot.wait_for('message', check=lambda m: m.author == ctx.author and m.channel == ctx.channel, timeout=60)
+        data = message.content
+        # Save the data for later use
+        # Your code here
+        with open('data.txt', 'w') as file:
+            file.write(data)
+        await ctx.send("Data saved successfully!")
+    except asyncio.TimeoutError:
+        await ctx.send("Timeout! Please try again.")
+
+ 
 bot.run(TOKEN)
