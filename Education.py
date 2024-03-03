@@ -10,6 +10,7 @@ from bakery_canvas import get_submissions
 import matplotlib.pyplot as plt
 from datetime import datetime
 import asyncio
+import requests
 
 load_dotenv(override=True)
 TOKEN = os.getenv("TOKEN")
@@ -561,6 +562,7 @@ async def execute(ctx, command: str, user_token: str, course_id: int):
     else:
         await ctx.send("Invalid command. Please try again.")
         return course_id
+    
 
 @bot.command(name="say")
 async def say_message(ctx, *, message: str):
@@ -647,6 +649,7 @@ async def musc462(ctx):
 @bot.command(name="ENGL110SeminarInComposition")
 async def engl110seminarincomposition(ctx):
     await ctx.send(ENGL110SeminarInComposition)
+    
 
 @bot.event
 async def on_ready():
