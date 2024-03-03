@@ -257,7 +257,7 @@ MATH242 = generate_formatted_message(MATH242)
 MUSC462 = generate_formatted_message(MUSC462)
 
 
-async def predict_grades(ctx, user_token: str, course_id: int): 
+def predict_grades(ctx, user_token: str, course_id: int): 
     """
     consumes a user_token (a string) and a course_id (an integer) 
     and returns nothing but creates a graph with three running sums
@@ -547,35 +547,25 @@ def Funny(command):
     return command
     
 function_mapping = {
-    'jviszoki': Funny,
+    'exit': Funny,
     'course': Funny,
     'points' : Funny,
+    'comments': Funny,
+    'graded':Funny,
+    'score_ungraded':Funny,
+    'score':Funny,
+    'group':Funny,
+    'assignment':Funny,
+    'list':Funny,
+    'scores': Funny,
+    'earliness': Funny,
+    'compare': Funny,
+    'predict': Funny,
+    'help': Funny
 }    
     
     
-commands = ['course', 'points', 'comments', 'graded', 'score_ungrded', 'score', 'group', 'assignment', 'list', 'scores', 'earliness', 'compare', 'predict' ]    
-    
-@bot.command(name= "its_alive")
-async def set_data(ctx):
-    new = []
-    courses = get_courses(user_token)
-    for course in courses:
-        new.append(course.id)
-    course_total = count_courses(user_token)
-    if not course_total:
-        print("No courses available")
-        return 
-    b = find_cs1(user_token)
-    if b == 0:
-        b = new[0]
-    await ctx.send("Please Enter Your :")
-    try:
-        message = await bot.wait_for('message', check=lambda m: m.author == ctx.author and m.channel == ctx.channel, timeout=60)
-        data = message.content
-        if data in commands:
-            await ctx.send(execute(function_mapping.get(data), user_token, b))
-    except asyncio.TimeoutError:
-        await ctx.send("Timeout! Please try again.")
+commands = ['exit','course', 'points', 'comments', 'graded', 'score_ungrded', 'score', 'group', 'assignment', 'list', 'scores', 'earliness', 'compare', 'predict', 'help' ]    
                 
             
             
@@ -637,34 +627,23 @@ def execute(command: str, user_token: str, course_id: int)-> int:
     if command == "exit":
         return 0
     if command == "points":
-        print(total_points(user_token, course_id))
+        return(total_points(user_token, course_id))
     if command == "comments":
-        print(count_comments(user_token, course_id))
+        return(count_comments(user_token, course_id))
     if command == "graded":
-        print(ratio_graded(user_token, course_id))
+        return(ratio_graded(user_token, course_id))
     if command == "score_unweighted":
-        print(average_score(user_token, course_id)) 
+        return(average_score(user_token, course_id)) 
     if command == "score":
-        print(average_weighted(user_token, course_id))
-    if command == "group":
-        group_name = input("What's the group name?")
-        print(average_group(user_token, course_id, group_name))
+        return(average_weighted(user_token, course_id))
     if command == "assignment":
         placeholder = input("what's the assignment id?")
         assignment_id = int(placeholder) 
-        print(render_assignment(user_token, course_id, assignment_id))
+        return(render_assignment(user_token, course_id, assignment_id))
     if command == "list":
-        print(render_all(user_token, course_id))
-    if command == "scores":
-        plot_scores(user_token, course_id)
-    if command == "earliness":
-        plot_earliness(user_token, course_id) 
-    if command == "compare":
-        plot_points(user_token, course_id) 
-    if command == "predict":
-        predict_grades(user_token, course_id)
+        return(render_all(user_token, course_id))
     if command == "help":
-        print("""
+        return("""
 exit > Exit the application
 help > List all the commands
 course > Change current course
@@ -681,16 +660,11 @@ earliness > Plot the distribution of the days assignments were submitted early
 compare > Plot the relationship between assignments' points possible and their weighted points possible
 predict > Plot the trends in grades over assignments, showing max ever possible, max still possible, and minimum still possible
 """)
-        return 0 
     else:
         return course_id
 
-def main(user_token: str):
-    """
-    this function allows the user to interact with a console that will run the execute function 
-    based upon their input.
-    it will run a while loop allowing user input until the user chooses to exit and that will stop the loop.
-    """
+@bot.command(name="its_alive")
+async def set_data(ctx):
     new = []
     courses = get_courses(user_token)
     for course in courses:
@@ -698,14 +672,29 @@ def main(user_token: str):
     course_total = count_courses(user_token)
     if not course_total:
         print("No courses available")
-        return 
+        return
+
     b = find_cs1(user_token)
     if b == 0:
         b = new[0]
-    while b > 0:
-        command = input("Enter Your Command Here. For a list of commands, type help")
-        b = execute(command, user_token, b)
-        
+        await ctx.send("Please Enter Your :")
+
+    try:
+        message = await bot.wait_for('message', check=lambda m: m.author == ctx.author and m.channel == ctx.channel, timeout=60)
+        data = message.content
+
+        # Save user input to a file (optional)
+        with open('data.txt', 'w') as file:
+            file.write(data)
+
+        if data in commands:
+            # Execute the command and get the result
+            result = execute(data, user_token, b)
+
+            # Send the result back to the Discord channel
+            await ctx.send(result)  # This line sends the result to Discord
+    except asyncio.TimeoutError:
+        await ctx.send("Timeout! Please try again.")
 
 
 
