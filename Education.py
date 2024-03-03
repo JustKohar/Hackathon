@@ -193,6 +193,41 @@ CPEG202 = DiscordBotInformation(
     ta_hours="There Are Only TA Hours on Monday from 11am-7pm"
 )
 
+ENGL110SeminarInComposition = DiscordBotInformation(
+    class_name = "Seminar In Composition",
+    professors= "The Professor For This Course is Professor Amelia Chaney",
+    professors_hours= "Professor Amelia Chaney Has Office Hours Wednesday from 9-11am and 1-2pm on Zoom https://udel.zoom.us/j/96538994287",
+    location_of_professors="Professor Amelia Chaney is Located in 047 Memorial Hall (available in person by appointment)",
+    emails="Professor Amelia Chaney's Email Is: achaney@udel.edu",
+    ta_hours="There are No TA's Provided"
+)
+
+HIST137 = DiscordBotInformation(
+    class_name = "HIST137",
+    professors= "The Professor For This Course is Dr. Dotno D. Pount",
+    professors_hours= "Dr. Dotno D. Pount Has Office Hours Wednesday from 9-10am on Zoom https://upenn.zoom.us/j/4102686688",
+    location_of_professors="This Class is Asynchronous",
+    emails="Dr. Dotno D. Pount's Email Is: dpount@udel.edu",
+    ta_hours="There are No TA's Provided"
+)
+
+MATH242 = DiscordBotInformation(
+    class_name = "MATH242",
+    professors= "The Professor For This Course is Dr. Kim Daewa",
+    professors_hours= "Dr. Kim Daewa Has Office Hours on Monday/Wednesday/Friday From 11am-12pm",
+    location_of_professors="Dr. Kim Daewa is Located in Erwing 306",
+    emails="Dr. Kim Daewa's Email Is: daewakim@udel.edu",
+    ta_hours="Emmanuel Adebayo Is The TA and His Email Is: adebayo@udel.edu and His Office Hours are Monday/Wednesday/Friday from 10-11am Located in Erwing 212"
+)
+
+MUSC462 = DiscordBotInformation(
+    class_name = "MUSC462",
+    professors= "The Professor For This Course is Dr. Aimee Persall",
+    professors_hours= "Dr. Aimee Pearsall Does Not Hold Office Hours For This Class",
+    location_of_professors="Dr. Aimee Persall is Located Amy E. Dupont Music Building, Room 313",
+    emails="Dr. Aimee Persall's Email Is: apearsall@udel.edu",
+    ta_hours="The TA for This Course is Katelyn Viszoki, Who Can be Reached At: kmviszok@udel.edu in Erwing 212"
+)
 
 CISC181 = generate_formatted_message(CISC181)
 MUSC315 = generate_formatted_message(MUSC315)
@@ -210,20 +245,16 @@ MATH351 = generate_formatted_message(MATH351)
 CIEG315 = generate_formatted_message(CIEG315)
 CISC210 = generate_formatted_message(CISC210)
 CPEG202 = generate_formatted_message(CPEG202)
+ENGL110SeminarInComposition = generate_formatted_message(ENGL110SeminarInComposition)
+HIST137 = generate_formatted_message(HIST137)
+MATH242 = generate_formatted_message(MATH242)
+MUSC462 = generate_formatted_message(MUSC462)
 
-#MUSC315 = DiscordBotInformation("MUSC315\n", "The Professor for this course is Dr. Maria Anne Purciello\n","Dr. Purciello has open office hours on Thursday from 12:30-1:30\n",
-#"Dr. Purciello can be found on the third floor of the Amy E. DuPont Music building, room 317\n", "Dr. Purciello's email is: 'mpuriel@udel.edu'")
-
-#MUED337 = DiscordBotInformation("MUED337\n", "The Professor for this course is Dr. Lauren Reynolds", "Dr Reynolds holds office holds office hours by appointment.\n", 
-#                                "Dr. Reynolds office is located in the Amy E. Dupont music building, room 309\n", "Dr. Reynold's email address is: lhr@udel.edu")
 
 #MUSC462 = DiscordBotInformation("MUSC462\n", "The Professor for this course is Dr. Aimee Persall.\n", "Dr. Pearsall does not hold office hours for this class.\n", 
 #                                "Dr. Pearsall can be found in the Amy E. Dupont Music building, room 313.\n", "Dr. Pearsall's email is: apearsall.udel.edu\n", 
 #                                "The TA for this course is Katelyn Viszoki, who can be reached at: kmviszok@udel.edu")
 
-#HIST137 = DiscordBotInformation ("HIST137\n", "The Professor for this course is Dr. Donto D. Pount\n", "Dr. Pount holds office hours Wednesdays from 9-10am\n", 
- #                                "Dr. Pount's class is virtual, her zoom ID is '410 268 6688'\n", "Dr. Pount's email is dpount@udel.edu")
-#
 async def predict_grades(ctx, user_token: str, course_id: int): 
     """
     consumes a user_token (a string) and a course_id (an integer) 
@@ -600,6 +631,23 @@ async def cisc210(ctx):
 @bot.command(name="CPEG202")
 async def cpeg202(ctx):
     await ctx.send(CPEG202)
+    
+@bot.command(name="HIST137")
+async def hist137(ctx):
+    await ctx.send(HIST137)
+    
+@bot.command(name="MATH242")
+async def math242(ctx):
+    await ctx.send(MATH242)
+
+@bot.command(name="MUSC462")
+async def musc462(ctx):
+    await ctx.send(MUSC462)
+
+@bot.command(name="ENGL110SeminarInComposition")
+async def engl110seminarincomposition(ctx):
+    await ctx.send(ENGL110SeminarInComposition)
+
 @bot.event
 async def on_ready():
     print(f'{bot.user} is now running')
