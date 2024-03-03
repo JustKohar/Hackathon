@@ -825,7 +825,7 @@ async def set_data(ctx):
             file.write(data)
 
         if data in commands:
-            result = execute(data, user_token, b)
+            result = print(execute(data, user_token, b))
 
     except asyncio.TimeoutError:
         await ctx.send("Timeout! Please try again.")
@@ -945,3 +945,48 @@ async def on_ready():
 
 bot.run(TOKEN)
 
+@bot.command(name="about")
+async def bragging(ctx):
+    await ctx.send("""
+    Hello! My name is Hen Helper!\n
+    The purpose of this command is to give a brief, yet informational synopsis of my creation and implmentation, and even potential future uses!\n
+    
+    About Me:
+    -I was primarily coded in a little over 24 hours at the 2024 HenHacks Hackathon to compete in th beginner and educational categories.
+    My mission is to make finding your UD information (canvas assignment info, professor office hours, locations, and emails, academic advisor) easier!\n
+    
+    -With the potential to integrate discord to Canvas using a word professor Bart said at 2:00 that I can't currently remember, 
+    The applications for HenHelper dont have to just be limited to canvas (Help search academic advising meetings)
+    
+    
+    Features:
+    Canvas API integration 
+    Role assignment 
+    
+    Future iterations: 
+    -Integration with sage
+    -Moderation capabilities (looking to set up a syste that tracks words and phrases based on severity and keeps a shadow count of the number of times a particular user uses offensive language.
+    This allows for a quick autoban/automute at a certain number of strikes, which is usful in many cases).
+    -a Major finder (you input your major, and it spits back out 3 majors in similar fields with brief descriptions of the degree and jobs/salaries you can earn with each)
+    
+    Lesson:
+    Overall, I am not a very impressive bot, but thats ok! My beauty lies in the experience it was creating me.\n
+    I was created by a team of 4 who collectively had that many CISC classes under our belt. We want to show that doing something, anything with code, is an excellent way to practice and hone one's skills.\n
+    Also, regardless of whether or not the project is impressive, I am positive that practice makes better, and all who participated in my creation left a better programmer because of it.\n
+    I'm a Hen Helper because I help others,
+    and I show future programers/coders its ok to take a risk on a big idea./n
+    
+    We here at Hen Helper Inc. Beleive it is far better to go big than go home, as we are more than capable of realizing that other groups far surpass our technical know how,\n
+    but we're also capable of recognizing that in time we will have the skills to better implement our ideas!
+    
+    We also would like to give a quick shoutout to Dr. Bart and Nazim, who graciously sacrificed many hours to aid in my creation.
+    And an even more special thanks to MLH for helping to organize this event.
+    
+    
+    )               
+    
+    
+                   
+""")
+
+    
