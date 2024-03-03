@@ -2,12 +2,14 @@
 import os
 
 import discord
+from dataclasses import dataclass
 from discord.ext import commands
 from dotenv import load_dotenv
 from bakery_canvas import get_courses
 from bakery_canvas import get_submissions
 import matplotlib.pyplot as plt
 from datetime import datetime
+import asyncio
 
 load_dotenv(override=True)
 TOKEN = os.getenv("TOKEN")
@@ -18,7 +20,72 @@ client = discord.Client(intents=intents)
 
 bot = commands.Bot(command_prefix="~", intents=intents)
 
+# Define your Discord bot information class
+class DiscordBotInformation:
+    def __init__(self, class_name, professors, professors_hours, location_of_professors, emails, ta_hours):
+        self.class_name = class_name
+        self.professors = professors
+        self.professors_hours = professors_hours
+        self.location_of_professors = location_of_professors
+        self.emails = emails
+        self.ta_hours = ta_hours
 
+def generate_formatted_message(info: DiscordBotInformation) -> str:
+    formatted_message = f"**{info.class_name}**\n\n" \
+                        f"**Professors Names**:\n{info.professors}\n\n" \
+                        f"**Professors Office Hours**:\n{info.professors_hours}\n\n" \
+                        f"**Teachers Locations**:\n{info.location_of_professors}\n\n" \
+                        f"**Teachers Emails**:\n{info.emails}\n\n" \
+                        f"**TA Hours**:\n{info.ta_hours}"
+    return formatted_message
+
+CISC181 = DiscordBotInformation(
+    class_name="CISC181",
+    professors="The Professors Names are Dr/Professor Bart and Professor Silber!",
+    professors_hours="Dr/Professor Bart has Office Hours on Tuesday From 2:30pm-3:30pm\n"
+                     "Professor Silber Has Office Hours on Friday from 11:30am-12:30pm",
+    location_of_professors="Dr/Professor Bart is Located in Smith411 and Professor Silber is Located in Smith 413",
+    emails="Dr/Professor Barts Email: acbart+cisc181@udel.edu\n"
+           "Professor Silbers Email: silber@udel.edu",
+    ta_hours="On Monday: 9-11am, 11:30am-1:30pm, 1:45pm-2:45pm, 3-5:30pm\n"
+             "Tuesday: 10-2pm, 2:10-3:10pm, 4-5pm\n"
+             "Wednesday: 9-12pm, 12:30-5pm\n"
+             "Thursday: 11-3:15pm, 4-6pm\n"
+             "Friday: 8-10am, 10:10-1:30pm, 1:45-2:45pm, 3-5pm, 5:30-7:30pm"
+)
+MUSC315 = DiscordBotInformation(
+    class_name = "MUSC315",
+    professors= "The Professor For This Course is Dr. Maria Anne Purciello",
+    professors_hours= "Dr. Purciello Has Open Office Hours on Mondays and Wednesdays from 2-3pm",
+    location_of_professors="317 Amy E. du Pont Music Building",
+    emails="Dr. Purciello's Email Is: 'mpuriel@udel.edu",
+    ta_hours= "N/A"
+)
+MUED337 = DiscordBotInformation(
+    class_name = "MUED337",
+    professors= "The Professor For This Course is Dr. Lauren Reynolds",
+    professors_hours= "By Appointment",
+    location_of_professors="AED 309",
+    emails="Dr. Purciello's Email Is: lhr@udel.edu",
+    ta_hours= "N/A"
+)
+CISC181 = generate_formatted_message(CISC181)
+MUSC315 = generate_formatted_message(MUSC315)
+MUED337 = generate_formatted_message(MUED337)
+
+#MUSC315 = DiscordBotInformation("MUSC315\n", "The Professor for this course is Dr. Maria Anne Purciello\n","Dr. Purciello has open office hours on Thursday from 12:30-1:30\n",
+#"Dr. Purciello can be found on the third floor of the Amy E. DuPont Music building, room 317\n", "Dr. Purciello's email is: 'mpuriel@udel.edu'")
+
+#MUED337 = DiscordBotInformation("MUED337\n", "The Professor for this course is Dr. Lauren Reynolds", "Dr Reynolds holds office holds office hours by appointment.\n", 
+#                                "Dr. Reynolds office is located in the Amy E. Dupont music building, room 309\n", "Dr. Reynold's email address is: lhr@udel.edu")
+
+#MUSC462 = DiscordBotInformation("MUSC462\n", "The Professor for this course is Dr. Aimee Persall.\n", "Dr. Pearsall does not hold office hours for this class.\n", 
+#                                "Dr. Pearsall can be found in the Amy E. Dupont Music building, room 313.\n", "Dr. Pearsall's email is: apearsall.udel.edu\n", 
+#                                "The TA for this course is Katelyn Viszoki, who can be reached at: kmviszok@udel.edu")
+
+#HIST137 = DiscordBotInformation ("HIST137\n", "The Professor for this course is Dr. Donto D. Pount\n", "Dr. Pount holds office hours Wednesdays from 9-10am\n", 
+ #                                "Dr. Pount's class is virtual, her zoom ID is '410 268 6688'\n", "Dr. Pount's email is dpount@udel.edu")
+#
 async def predict_grades(ctx, user_token: str, course_id: int): 
     """
     consumes a user_token (a string) and a course_id (an integer) 
@@ -301,134 +368,30 @@ def render_courses(user_token: str)-> str:
         apple = apple + course
     return apple 
 
-def execute(command: str, user_token: str, course_id: int)-> int:
-    """
-    this function does a variety of things based upon the command.
-    
-    if the command is course, the function will return the new course and course ID
-    
-    if the command is exit, the function closes
-    
-    if the command is points, the function prints the total points available for all assignments
-    
-    if the command is comments, the function runs count_comments on the current course_id and prints the result
-    
-    if the command is graded, the function prints the result of calling ratio_graded on the function
-    
-    if the command is score_unweighted, the function prints the result of calling average_score for the current course id 
-    
-    if the command is score, the fucntion prints the result of calling average_weighted for the current course_id 
-    
-    if the command is group, the fucntion prints the average of a group by:
-        Prompting the user for a group name
-        Calling the average_group function
-        Printing the result
-    
-    if the command is assignment, the function prints out the assignment details by:
-        Prompting the user for an assignment ID
-        Converting the result to an integer
-        Calling the render_assignment function
-        Printing the result
-    
-    if the command is list,  the fucntion prints out the result of calling render_all on the current course ID, to list all the current assignments.
-    
-    if the command is scores, the function calls the plot_scores function to create a graph of the distribution of fractional scores of graded assignments.
-    
-    if the command is earliness, the function calls the plot_earliness function 
-    to create a graph of the distribution of the earliness of submissions relative to their due date.
-    
-    if the command is compare, the function calls the plot_points function to create a graph of the relationship between assignments' 
-    points possible and their weighted points possible, to analyze how different the values are.
-    
-    if the command is predict, the function calls the predict_grades function to create a graph with three running sums, 
-    showing the possible grades that could be earned in the course (maximum ever possible, maximum still possible, minimum still possible).
-    
-    if the command is help, the function prints out a list of commands and a short description to go with each 
-    
-    otherwise the function returns the course_id value that was input at the beginning
-    """
+@bot.command(name="execute")
+async def execute(ctx, command: str, user_token: str, course_id: int):
     if command == "course":
-        print(render_courses(user_token))
-        a = input("new course ID")
-        a = int(a)
-        print(find_course(user_token, a))
-        return a
-    if command == "exit":
+        await ctx.send(render_courses(user_token))
+        a = await ctx.send("Please enter the new course ID:")
+        try:
+            response = await bot.wait_for("message", check=lambda m: m.author == ctx.author, timeout=30)
+            a = int(response.content)
+            await ctx.send(find_course(user_token, a))
+            return a
+        except asyncio.TimeoutError:
+            await ctx.send("Timed out. Please try again.")
+            return course_id
+    elif command == "exit":
+        await ctx.send("Exiting the application.")
         return 0
-    if command == "points":
-        print(total_points(user_token, course_id))
-    if command == "comments":
-        print(count_comments(user_token, course_id))
-    if command == "graded":
-        print(ratio_graded(user_token, course_id))
-    if command == "score_unweighted":
-        print(average_score(user_token, course_id)) 
-    if command == "score":
-        print(average_weighted(user_token, course_id))
-    if command == "group":
-        group_name = input("What's the group name?")
-        print(average_group(user_token, course_id, group_name))
-    if command == "assignment":
-        placeholder = input("what's the assignment id?")
-        assignment_id = int(placeholder) 
-        print(render_assignment(user_token, course_id, assignment_id))
-    if command == "list":
-        print(render_all(user_token, course_id))
-    if command == "scores":
-        plot_scores(user_token, course_id)
-    if command == "earliness":
-        plot_earliness(user_token, course_id) 
-    if command == "compare":
-        plot_points(user_token, course_id) 
-    if command == "predict":
-        predict_grades(user_token, course_id)
-    if command == "help":
-        print("""
-exit > Exit the application
-help > List all the commands
-course > Change current course
-points > Print total points in course
-comments > Print how many comments in course
-graded > Print ratio of ungraded/graded assignments
-score_unweighted > Print average unweighted score
-score > Print average weighted score
-group > Print average of assignment group, by name
-assignment > Print the details of a specific assignment, by ID
-list > List all the assignments in the course
-scores > Plot the distribution of grades in the course
-earliness > Plot the distribution of the days assignments were submitted early
-compare > Plot the relationship between assignments' points possible and their weighted points possible
-predict > Plot the trends in grades over assignments, showing max ever possible, max still possible, and minimum still possible
-""")
-        return 0 
+    elif command == "points":
+        await ctx.send(total_points(user_token, course_id))
+    elif command == "comments":
+        await ctx.send(count_comments(user_token, course_id))
+    # Add other commands here...
     else:
+        await ctx.send("Invalid command. Please try again.")
         return course_id
-        
-@bot.command(name="main", description="Interact with a console to run execute function based on input")
-async def main(ctx, user_token: str):
-    """
-    This function allows the user to interact with a console that will run the execute function
-    based upon their input.
-    It will run a while loop allowing user input until the user chooses to exit and that will stop the loop.
-    """
-    new = []
-    courses = get_courses(user_token)  
-    for course in courses:
-        new.append(course.id)
-    course_total = count_courses(user_token)  
-    if not course_total:
-        await ctx.send("No courses available")
-        return
-    b = find_cs1(user_token)  
-    if b == 0:
-        b = new[0]
-    while b > 0:
-        await ctx.send("Enter Your Command Here. For a list of commands, type help")
-
-
-def main():
-    apples()
-    pass
 
 @bot.command(name="say")
 async def say_message(ctx, *, message: str):
@@ -436,13 +399,17 @@ async def say_message(ctx, *, message: str):
     channel = bot.get_channel(channel_id)
     await channel.send(message)
 
-@bot.command(name="apples")
+@bot.command(name="MUED337")
 async def apples(ctx):
-    await ctx.send("hello")
+    await ctx.send(MUED337)
     
-@bot.command(name="pop")
-async def pop(ctx):
-    await ctx.send("goodbye")
+@bot.command(name="MUSC315")
+async def mued337(ctx):
+    await ctx.send(MUSC315)
+    
+@bot.command(name="CISC181")
+async def cisc181(ctx):
+    await ctx.send(CISC181)
 
 @bot.event
 async def on_ready():
