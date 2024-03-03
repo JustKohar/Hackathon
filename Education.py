@@ -23,8 +23,9 @@ client = discord.Client(intents=intents)
 bot = commands.Bot(command_prefix="~", intents=intents)
 intents.typing = False
 intents.presences = False
+user_token = os.getenv("user_token")
 
-# Define your Discord bot information class
+
 class DiscordBotInformation:
     def __init__(self, class_name, professors, professors_hours, location_of_professors, emails, ta_hours):
         self.class_name = class_name
@@ -254,10 +255,6 @@ HIST137 = generate_formatted_message(HIST137)
 MATH242 = generate_formatted_message(MATH242)
 MUSC462 = generate_formatted_message(MUSC462)
 
-
-#MUSC462 = DiscordBotInformation("MUSC462\n", "The Professor for this course is Dr. Aimee Persall.\n", "Dr. Pearsall does not hold office hours for this class.\n", 
-#                                "Dr. Pearsall can be found in the Amy E. Dupont Music building, room 313.\n", "Dr. Pearsall's email is: apearsall.udel.edu\n", 
-#                                "The TA for this course is Katelyn Viszoki, who can be reached at: kmviszok@udel.edu")
 
 async def predict_grades(ctx, user_token: str, course_id: int): 
     """
@@ -590,6 +587,7 @@ async def execute(ctx):
     
         otherwise the function returns the course_id value that was input at the beginning
         """
+        command = input("enter your in[put here]")
         if command == "course":
             print(render_courses(user_token))
             a = input("new course ID")
@@ -646,7 +644,27 @@ predict > Plot the trends in grades over assignments, showing max ever possible,
             return 0 
         else:
             return course_id
-    
+
+    def main(user_token: str):
+        """
+        this function allows the user to interact with a console that will run the execute function 
+        based upon their input.
+        it will run a while loop allowing user input until the user chooses to exit and that will stop the loop.
+        """
+        new = []
+        courses = get_courses(user_token)
+        for course in courses:
+            new.append(course.id)
+        course_total = count_courses(user_token)
+        if not course_total:
+            print("No courses available")
+            return 
+        b = find_cs1(user_token)
+        if b == 0:
+            b = new[0]
+        while b > 0:
+            command = input("Enter Your Command Here. For a list of commands, type help")
+            b = execute(command, user_token, b)
 
 
 @bot.command(name="say")
@@ -738,8 +756,8 @@ async def engl110seminarincomposition(ctx):
 @bot.event
 async def on_ready():
     print(f'Logged in as {bot.user.name}')
-
-@bot.command(name="Canvas")
+    
+@bot.command(name= "Canvas")  
 async def set_data(ctx):
     await ctx.send("Please Enter Your :")
     try:
@@ -747,11 +765,11 @@ async def set_data(ctx):
         data = message.content
         # Save the data for later use
         # Your code here
-        with open('data.txt', 'w') as file:
-            file.write(data)
+        print(execute(data))
         await ctx.send("Data saved successfully!")
     except asyncio.TimeoutError:
         await ctx.send("Timeout! Please try again.")
-        
 
 bot.run(TOKEN)
+
+
