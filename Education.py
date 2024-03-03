@@ -66,12 +66,128 @@ MUED337 = DiscordBotInformation(
     professors= "The Professor For This Course is Dr. Lauren Reynolds",
     professors_hours= "By Appointment",
     location_of_professors="AED 309",
-    emails="Dr. Purciello's Email Is: lhr@udel.edu",
+    emails="Dr. Lauren Reynolds's Email Is: lhr@udel.edu",
     ta_hours= "N/A"
 )
+LING101 = DiscordBotInformation(
+    class_name = "LING101",
+    professors= "The Professor For This Course is Professor Nadya Pinus",
+    professors_hours= "Professor Nadya Pinus Has Open Office Hours on Mondays from 3-4pm and Thursday from 10-11am and By Appoinement",
+    location_of_professors="Linguistics & Cog. Sci Office Room 117",
+    emails="Professor Nadya Pinus's Email Is: npincus@udel.edu",
+    ta_hours="On Monday: 12-1pm\n"
+             "Tuesday: 10-11am\n"
+             "Wednesday: 11:30am-1pm\n"
+             "Friday: 11:30am-12:30pm"
+)
+
+PHYS227 = DiscordBotInformation(
+    class_name = "PHYS227",
+    professors= "The Professor For This Course is Dr. John D Shaw",
+    professors_hours= "Dr. John D Shaw Has Open Office Hours on Mondays/Tuesday/Thursday from 1-2pm **BUT ARE SUBJECT TO CHANGE!**",
+    location_of_professors="Sharp Lab 210",
+    emails="Dr. John D Shaw's Email Is: jdshaw@udel.edu",
+    ta_hours="TA Hours Vary Since there Are So Many Labs. However the Physics Help Center is Open from Monday/Tuesday/Wednesday/Thursday from 11am-7pm and Friday from 11am-3pm in Sharp Lab 101"
+)
+
+CHEM120 = DiscordBotInformation(
+    class_name = "CHEM120",
+    professors= "The Professor For This Course is Professor Thomas P Beebe Jr",
+    professors_hours= "Professor Thomas P Beebe Jr Has Online Office Hours on Tuesday/Thursday from 11:10am-12:30pm, the Zoom Link is https://udel.zoom.us/j/92941838443",
+    location_of_professors="Not Listed",
+    emails="Professor Thomas P Beebe Jr Email Is: UDChem120@udel.edu",
+    ta_hours="TA Hours Vary Since there Are So Many Chem Classes. However the Chemistry Resource Center is Open from Monday through Friday from 8am-8pm in BRL 208"
+)
+
+PHYS207 = DiscordBotInformation(
+    class_name = "PHYS207",
+    professors= "The Professor For This Course is Dr. Olga Narvos",
+    professors_hours= "Dr. Olga Narvos Has Office Hours on Monday from 1:45-2:40pm, Tuesday and Friday from 10:30-11:30am",
+    location_of_professors="Sharp Lab 208",
+    emails="Dr. Olga Narvos Email Is: onarvos@udel.edu",
+    ta_hours="TA Hours Vary Since there Are So Many Physic Classes. However the Physics Help Center is Open from Monday/Tuesday/Wednesday/Thursday from 11am-7pm and Friday from 11am-3pm in Sharp Lab 101"
+)
+
+EDUC400 = DiscordBotInformation(
+    class_name = "EDUC400",
+    professors= "There are Many Teachers for This Course but The Supervisors are, Dr. Mark Adams (Instrumental Music), Dr. Duane Cottrell (Choral Music), and Aimee Pearsall (General Music)",
+    professors_hours= "There is No Office Hours Provided",
+    location_of_professors="N/A",
+    emails="Dr. Mark Adams Email Is: adamsm@udel.edu, Dr. Duane Cottrell Email Is: dco@udel.edu, and Aimee Pearsall Email Is: apearsall@udel.edu ",
+    ta_hours="There are no TA Hours Listed but Julia Grossman is a Graduate TA. Her Email Is: jngross@udel.edu"
+)
+
+CIEG161 = DiscordBotInformation(
+    class_name = "CIEG161",
+    professors= "There are Many Teachers for This Course but The Instructors are, Dr. Allen Jayne (Structure), Dr. Tian-Jian (Tom) (Coastal and Ocean), and Dr. Jack Puleo (Coastal and Ocean)",
+    professors_hours= "Dr. Allen Jayne Has Office Hours on Monday from 9:30-10:30am and on Thursday from 12:30-1:30pm",
+    location_of_professors="Dr. Allen Jayne is Located in 307 DuPont Hall, Dr. Tian-Jian is Located in 205 Ocean Engineering Lab, and Dr. Jack Puleo is Located in 301 DuPont Hall",
+    emails="Dr. Allen Jayne Email Is: ajayne@udel.edu, Dr. Tian-Jian Email Is: thsu@udel.edu, and Dr. Jack Puleo Email Is: jpuleo@udel.edu",
+    ta_hours="There are no TA's/TA Hours Listed"
+)
+
+HIST104 = DiscordBotInformation(
+    class_name = "HIST104",
+    professors= "The Professor For This Course is Professor Benjamin Tomak ",
+    professors_hours= "Professor Benjamin Tomak Has Office Hours on Tuesday/Thursday from 12:45-2:05pm",
+    location_of_professors="Professor Benjamin Tomak is Located in Gore 304",
+    emails="Professor Benjamin Tomak's Email Is: btomak@udel.edu",
+    ta_hours="There are no TA's/TA Hours Listed"
+)
+
+MATH243 = DiscordBotInformation(
+    class_name = "MATH243",
+    professors= "The Professor For This Course is Dr. Cristina Bacuta ",
+    professors_hours= "Dr. Cristina Bacuta Has Office Hours on Monday from 3-4:30pm and Wednesdays from 8:15-9:45am",
+    location_of_professors="Dr. Cristina Bacuta is Located in Erwing 305",
+    emails="Dr. Cristina Bacuta's Email Is: crbacuta@udel.edu",
+    ta_hours="Since TA's Vary in Class Schedules, Ask TA for Hours"
+)
+
+COMM212 = DiscordBotInformation(
+    class_name = "COMM212",
+    professors= "The Professor For This Course is Dr. Alan Fox",
+    professors_hours= "Dr. Alan Fox Has Office Hours on Tuesday/Thursday from 1-2pm",
+    location_of_professors="Not Provided",
+    emails="Dr. Alan Fox's Email Is: afox@udel.edu",
+    ta_hours="Dr. Alan Fox has 'Writing Fellows'. Brandon Cangialosi and His Email Is: bcangial@udel.edu and Isabella Haigney Who's Email Is: ihaigney@udel.edu"
+)
+
+MATH351 = DiscordBotInformation(
+    class_name = "MATH351",
+    professors= "The Professor For This Course is Professor Shuya Yu",
+    professors_hours= "Professor Shuya Yu Has Office Hours on Monday//Wednesday/Friday from 12-1pm",
+    location_of_professors="Professor Shuya Yu is Located in Erwing 108",
+    emails="Professor Shuya Yu's Email Is: shuyayu@udel.edu",
+    ta_hours="No TA's Listed, Ask in Discussion"
+)
+
+CIEG315 = DiscordBotInformation(
+    class_name = "CIEG315",
+    professors= "The Professor For This Course is Dr. Mark Nejad",
+    professors_hours= "Dr. Mark Nejad Has Office Hours on Tuesday/Thursday from 11am-12pm",
+    location_of_professors="Dr. Mark Nejad is Located in 352-B DuPont Hall",
+    emails="Dr. Mark Nejad's Email Is: shuyayu@udel.edu",
+    ta_hours="Farshad Hesamfar, His Email Is: farshaad@udel.edu and His Office Hours are Monday/Wednesday from 4-6pm in 306K DuPont Hall"
+)
+
+
+
 CISC181 = generate_formatted_message(CISC181)
 MUSC315 = generate_formatted_message(MUSC315)
 MUED337 = generate_formatted_message(MUED337)
+LING101 = generate_formatted_message(LING101)
+PHYS227 = generate_formatted_message(PHYS227)
+CHEM120 = generate_formatted_message(CHEM120)
+PHYS207 = generate_formatted_message(PHYS207)
+EDUC400 = generate_formatted_message(EDUC400)
+CIEG161 = generate_formatted_message(CIEG161)
+HIST104 = generate_formatted_message(HIST104)
+MATH243 = generate_formatted_message(MATH243)
+COMM212 = generate_formatted_message(COMM212)
+MATH351 = generate_formatted_message(MATH351)
+CIEG315 = generate_formatted_message(CIEG315)
+
 
 #MUSC315 = DiscordBotInformation("MUSC315\n", "The Professor for this course is Dr. Maria Anne Purciello\n","Dr. Purciello has open office hours on Thursday from 12:30-1:30\n",
 #"Dr. Purciello can be found on the third floor of the Amy E. DuPont Music building, room 317\n", "Dr. Purciello's email is: 'mpuriel@udel.edu'")
@@ -411,6 +527,50 @@ async def mued337(ctx):
 async def cisc181(ctx):
     await ctx.send(CISC181)
 
+@bot.command(name="LING101")
+async def ling101(ctx):
+    await ctx.send(LING101)
+    
+@bot.command(name="PHYS227")
+async def phys227(ctx):
+    await ctx.send(PHYS227)
+    
+@bot.command(name="CHEM120")
+async def chem120(ctx):
+    await ctx.send(CHEM120)
+    
+@bot.command(name="PHYS207")
+async def phys207(ctx):
+    await ctx.send(PHYS207)
+    
+@bot.command(name="EDUC400")
+async def udac400(ctx):
+    await ctx.send(EDUC400)
+    
+@bot.command(name="CIEG161")
+async def cieg161(ctx):
+    await ctx.send(CIEG161)
+
+@bot.command(name="HIST104")
+async def hist104(ctx):
+    await ctx.send(HIST104)
+    
+@bot.command(name="MATH243")
+async def math243(ctx):
+    await ctx.send(MATH243)
+    
+@bot.command(name="COMM212")
+async def comm212(ctx):
+    await ctx.send(COMM212)
+    
+@bot.command(name="MATH351")
+async def math351(ctx):
+    await ctx.send(MATH351)
+    
+@bot.command(name="CIEG315")
+async def cieg315(ctx):
+    await ctx.send(CIEG315)
+    
 @bot.event
 async def on_ready():
     print(f'{bot.user} is now running')
